@@ -7,20 +7,20 @@ f = open("input.txt", 'r')
 data = [e for e in f.read().split('\n') if e != ""]
 
 taskNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-ante = {tn:[] for tn in taskNames}
-for iDat, vDat in enumerate(data):
-	ante[ vDat[36] ].append( vDat[5] )
+ante = {tn:[] for tn in taskNames}   # Empty pre-task list for every task
+for dat in data:
+	ante[ dat[36] ].append( dat[5] ) # Pretask addition
 
 print "     ***** PART ONE *****"
 
-tasks = taskNames
-order = ""
-while len(tasks) > 0:
+tasks = taskNames     # Tasks to be done
+order = ""            # Done tasks will be append to this string one by one
+while len(tasks) > 0: # While there is something to be done
 	for tn in tasks:
-		if len(set(ante[tn])-set(order)) > 0: continue #If any pretask undone,skip
-		order += tn
-		tasks = tasks.replace(tn, '')
-		break		
+		if len(set(ante[tn])-set(order)) > 0: continue # Pretask undone? skip
+		order += tn                                    # Add task to the done list
+		tasks = tasks.replace(tn, '')                  # It's not to do any more!
+		break                                          # Returns to the while loop
 print "(i) %s"%order
 
 print "     ***** PART TWO *****"
@@ -58,8 +58,7 @@ while len(done) < len(taskNames):
 	while len(ongoing)<nPara and len(tasks)>0 and stillLooking:
 		stillLooking = False # If no task found ready, assume there's none!
 		for tn in tasks:
-			# Is every pre-tasks done?
-			if len( set(ante[tn]) - set(done) ) > 0: continue
+			if len(set(ante[tn])-set(order)) > 0: continue # Pretask undone? skip
 			ongoing += tn
 			remaining.append(baseDelay+1+taskNames.index(tn))
 			tasks = tasks.replace(tn, '')
